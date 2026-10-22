@@ -1,0 +1,111 @@
+
+#include <stdio.h>
+#define MAX 5
+
+typedef struct {
+    int jobid;
+    char filename[50];
+} printjob;
+
+printjob queue[MAX];
+
+int front = -1, rear = -1;
+
+void insert(void);
+void delete(void);
+void display(void);
+
+void insert(void)
+{
+    printjob item;
+
+    if (rear == MAX - 1) {
+        printf("Queue overflow: Printer queue is full\n");
+        return;
+    }
+
+    printf("Enter job ID: ");
+    scanf("%d", &item.jobid);
+
+    printf("Enter file name: ");
+    scanf("%49s", item.filename);
+
+    rear = rear + 1;
+    queue[rear] = item;
+
+    printf("Print job inserted successfully\n");
+}
+
+void delete(void)
+{
+    printjob item;
+
+    if (front == rear) {
+        printf("Queue underflow: Queue is empty\n");
+        return;
+    }
+
+    item = queue[++front];
+
+    printf("Deleted job ID: %d\n", item.jobid);
+    printf("File name: %s\n", item.filename);
+
+    if (front == rear) {
+        front = rear = -1;
+    }
+}
+
+void display(void)
+{
+    int i;
+
+    if (front == rear) {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    printf("The elements of queue are:\n");
+
+    for (i = front + 1; i <= rear; i++) {
+        printf("Job ID: %d, File name: %s\n",
+               queue[i].jobid, queue[i].filename);
+    }
+}
+
+int main(void)
+{
+    int choice;
+
+    while (1) {
+        printf("\n1. Insert\n");
+        printf("2. Delete\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input\n");
+            return 1;
+        }
+
+        switch (choice) {
+            case 1:
+                insert();
+                break;
+
+            case 2:
+                delete();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                return 0;
+
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+}
